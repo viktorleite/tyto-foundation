@@ -83,6 +83,15 @@ class Application
         $this->booted = true;
     }
 
+    public function shutdown(): void
+    {
+        if (!$this->booted) {
+            return;
+        }        
+
+        $this->booted = false;
+    }
+
      protected function checkEnvironment(): void
     {
         $minVersionId = $this->config['min_php_version_id'] ?? 80200;
@@ -155,6 +164,13 @@ class Application
         return true;
     }
 
+    public function getStartTime(): float
+    {
+        return $this->debug && null !== $this->bootStartedAt
+            ? $this->bootStartedAt
+            : -INF;
+    }
+
     public function isDebug(): bool
     {
         return $this->debug;
@@ -167,4 +183,6 @@ class Application
         }
         return $this->config[$key] ?? $default;
     }
+
+    
 }
